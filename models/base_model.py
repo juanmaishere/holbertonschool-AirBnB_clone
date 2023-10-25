@@ -12,14 +12,21 @@ class BaseModel:
     Id uniq id for the class
     Created and updated , date records
     """
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """
         id attribute unique for each instance
         created at and updated at , date and time of creation/update
         """
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.datetime.now()
-        self.updated_at = datetime.datetime.now()
+        if kwargs:
+            for key, value in kwargs.items():
+                if key != "__class__":
+                    if key in ['created_at', 'updated_at']:
+                        value = datetime.datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+                    setattr(self, key, value)
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.datetime.now()
+            self.updated_at = datetime.datetime.now()
 
     def __str__(self):
         """
