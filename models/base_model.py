@@ -4,6 +4,7 @@ Definition of baseclass for other classes
 """
 import uuid
 import datetime
+from models import storage
 
 
 class BaseModel:
@@ -27,6 +28,7 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.datetime.now()
             self.updated_at = datetime.datetime.now()
+            storage.new(self)
 
     def __str__(self):
         """
@@ -39,6 +41,7 @@ class BaseModel:
         Update to new datetime when change made
         """
         self.updated_at = datetime.datetime.now()
+        storage.save()
 
     def to_dict(self):
         """
